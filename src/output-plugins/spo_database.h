@@ -19,6 +19,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+** Modified by DA to correct transactionErrorThreshold set to incorrect data type
 **
 **    Special thanks to: Rusell Fuleton <russell.fulton@gmail.com> for helping us stress test
 **                       this in production for us.
@@ -340,8 +341,8 @@ typedef struct _dbReliabilityHandle
     
     u_int8_t checkTransaction; /* If set , we are in transaction */
     u_int8_t transactionCallFail; /* if(checkTransaction) && error set ! */
-    u_int8_t transactionErrorCount; /* Number of transaction fail for a single transaction (Reset by sucessfull commit)*/
-    u_int8_t transactionErrorThreshold; /* Consider the transaction threshold to be the same as reconnection maxiumum */
+    u_int32_t transactionErrorCount; /* Number of transaction fail for a single transaction (Reset by sucessfull commit)*/
+    u_int32_t transactionErrorThreshold; /* Consider the transaction threshold to be the same as reconnection maxiumum */
      
     u_int8_t disablesigref; /* Allow user to prevent generation and creation of signature reference table */
     

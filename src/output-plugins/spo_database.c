@@ -19,6 +19,8 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+**
+** Modified by DA 2016-06-09 to add more logging for transactionErrorThreshold reached 
 */
 
 /*
@@ -1140,10 +1142,15 @@ void ParseDatabaseArgs(DatabaseData *data)
 	{
 	    data->dbRH[data->dbtype_id].dbConnectionLimit = strtoul(a1,NULL,10);
 
+		LogMessage("Connection Limit set as: [%u] \n",
+			data->dbRH[data->dbtype_id].dbConnectionLimit);		
+
 	    /* Might make a different option for it but for now lets consider
 	       the threshold being the same as connectionlimit. */
 	    data->dbRH[data->dbtype_id].transactionErrorThreshold = data->dbRH[data->dbtype_id].dbConnectionLimit; 
-	    
+		LogMessage("Transaction Error Threshold set as: [%u] \n",
+			data->dbRH[data->dbtype_id].transactionErrorThreshold);
+
 	}
 	if(!strncasecmp(dbarg,KEYWORD_RECONNECT_SLEEP_TIME,strlen(KEYWORD_RECONNECT_SLEEP_TIME)))
 	{
@@ -1152,6 +1159,7 @@ void ParseDatabaseArgs(DatabaseData *data)
 	if(!strncasecmp(dbarg,KEYWORD_DISABLE_SIGREFTABLE,strlen(KEYWORD_DISABLE_SIGREFTABLE)))
 	{
 	    data->dbRH[data->dbtype_id].disablesigref = 1;
+		LogMessage("Import of Signature Reference Table Disabled.\n");
 	}
 
 #ifdef ENABLE_MYSQL
@@ -4665,6 +4673,8 @@ void setTransactionCallFail(dbReliabilityHandle *pdbRH)
     {
 	pdbRH->transactionCallFail=1;
 	pdbRH->transactionErrorCount++;
+	LogMessage("Transaction Error Count now set at %u \n",
+		pdbRH->transactionErrorCount);
     }
     
     return;
